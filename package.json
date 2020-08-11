@@ -1,0 +1,37 @@
+{
+  "name": "cabal-state",
+  "version": "1.0.0",
+  "description": "run a state machine in a cabal-core channel",
+  "main": "index.js",
+  "bin": {
+    "cabal-state": "cabal-state-to-json.js"
+  },
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanramage/cabal-state.git"
+  },
+  "keywords": [
+    "cabal",
+    "xstate"
+  ],
+  "author": "Ryan Ramage",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryanramage/cabal-state/issues"
+  },
+  "homepage": "https://github.com/ryanramage/cabal-state#readme",
+  "devDependencies": {
+    "tap": "^14.10.8",
+    "tape": "^5.0.1",
+    "xstate": "^4.11.0"
+  },
+  "dependencies": {
+    "vm2": "^3.9.2"
+  }
+}
