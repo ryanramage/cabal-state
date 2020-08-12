@@ -2,22 +2,35 @@ const machine = {
   id: 'trigger',
   initial: 'inactive',
   context: {
-    level: 0
+    triggerCount: 0
   },
   states: {
     inactive: {
       on: {
         TRIGGER: {
           target: 'active',
-          actions: ['activate', 'sendTelemetry']
+          cond: { type: 'minTwo' },
+          actions: ['activate', 'sendTelemetry', 'incTriggerCount']
         }
       }
     },
+    warm: {
+      on: {
+        TRIGGER: {
+          target: 'active',
+        }
+      }
+    },
+
     active: {
+      //cond: 'minTwo',
       entry: ['notifyActive', 'sendTelemetry'],
       exit: ['notifyInactive', 'sendTelemetry'],
       on: {
-        STOP: 'inactive'
+        STOP: {
+          target: 'inactive',
+          actions: 'resetTriggerCount'
+        }
       }
     }
   }
@@ -39,8 +52,17 @@ const actions = {
   }
 }
 
-const guards = {
-  glassIsFull: (context, event) => context.amount >= 10
+const assignments = {
+  incTriggerCount: {
+    triggerCount: (context, event) => context.triggerCount + 1
+  },
+  resetTriggerCount: {
+    triggerCount: 0
+  }
 }
 
-module.exports = { machine, actions, guards }
+const guards = {
+  minTwo: (context, event) => context.triggerCount >= 2
+}
+
+module.exports = { machine, actions, assignments, guards }

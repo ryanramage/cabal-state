@@ -11,12 +11,14 @@ test('dehydrate/rehydrate cycle', t => {
 
   const service = interpret(machine).onTransition(state => {
     console.log(state.value);
+    console.log(state.context)
   });
 
   // Start the service
   service.start();
 
   // Send events
+  service.send('TRIGGER');
   service.send('TRIGGER');
   service.send('STOP')
 
