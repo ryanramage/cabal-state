@@ -8,10 +8,9 @@ let fullPath = path.resolve(process.cwd(), file)
 let toFile = fullPath + 'on' // make a json
 
 const loaded = require(fullPath)
-const data = dehydrate(loaded)
+const asString = dehydrate.toString(loaded)
 
-
-fs.writeFile(toFile, data, (err) => {
+fs.writeFile(toFile, asString, (err) => {
   if (err) console.log(err)
   else console.log('wrote', toFile)
 })

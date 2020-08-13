@@ -4,7 +4,7 @@
   "description": "run a state machine in a cabal-core channel",
   "main": "index.js",
   "bin": {
-    "cabal-state": "cabal-state-to-json.js"
+    "cabal-state": "./bin/cabal-state-to-json.js"
   },
   "directories": {
     "example": "examples"
@@ -28,10 +28,11 @@
   "homepage": "https://github.com/ryanramage/cabal-state#readme",
   "devDependencies": {
     "tap": "^14.10.8",
-    "tape": "^5.0.1",
-    "xstate": "^4.11.0"
+    "tape": "^5.0.1"
   },
   "dependencies": {
-    "vm2": "^3.9.2"
+    "collect-stream": "^1.2.1",
+    "vm2": "^3.9.2",
+    "xstate": "^4.11.0"
   }
 }
