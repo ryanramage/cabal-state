@@ -5,6 +5,17 @@ Run a state machine inside a [cabal-core](https://github.com/cabal-club/cabal-co
 
 Status: Experimental
 
+motivation
+----------
+
+I wanted to create something less formal than a smart contract, but still does a shared vm and could be auditable.
+
+Use cases could include:
+
+ - small group workflows. Lets take on docusign, voting, etc
+ - jackbox style p2p games with no host server. The shared game state runs over the cabal channel.
+ - more ideas to come...
+
 usage
 -----
 
@@ -31,8 +42,17 @@ API
 Create a running service, which is an instance of [XState interpreter](https://xstate.js.org/docs/guides/interpretation.html#interpreter)
 
  - ```cabal``` is a [cabal-core](https://github.com/cabal-club/cabal-core) p2p database
- - ```machineDfn``` is a portable json file that defines the state machine. It will run in a VM sandbox. See [Creating the machineDfn](#creatingthemachinedfn)
+ - ```machineDfn``` json file that defines the state machine. It will run in a VM sandbox. See [Creating the machineDfn](#creating-the-machinedfn)
  - ```channel``` channel name the state machine will listen for events to transition its current state.
+
+
+Sandbox
+-------
+
+Xstate allows for functions to execute as gaurd conditions, to compute state, and to have some side effects. Currently, we run all code
+in a [vm2](https://github.com/patriksimek/vm2) sandbox, and only allow access to the console.
+
+Its very important in a distributed environment that the state machine is side effect free. For example, adding fetch to the sandbox would cause many issues. 
 
 
 Creating The MachineDfn
@@ -47,12 +67,3 @@ A machine is best published to npm (but does not have to be). This gives it a re
  3. Run ```cabal-state index.js```. This converts the js to a portable json format in the ```index.json``` file.
  4. create a [package.json](https://github.com/ryanramage/cabal-state-example-button/blob/master/package.json) file that exports the index.json file, eg ```"main": "index.json",```
  5. publish to npm
-
-
-motivation
-----------
-
-I wanted to create something less formal than a smart contract, but still could be auditable. Use cases could include:
-
- - jackbox style p2p games with no host server. The shared game state runs over the cabal channel.
- - small group workflows. Lets take on docusign, voting, etc
