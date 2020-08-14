@@ -10,13 +10,14 @@ usage
 ```
 const Cabal = require('cabal-core')
 const CabalState = require('cabal-state')
-const level = require('level')
-
+const RAM = require('random-access-memory')
+const machineDfn = require('cabal-state-example-button')
 const key = '0201400f1fa2e3076a3f17f4521b2cc41e258c446cdaa44742afe6e1b9fd5f82'
-const instance = process.argv[2] || 1
-console.log(instance)
-
-const cabal = Cabal(`/tmp/cabal-${instance}.db`, key, { db: level(`/tmp/bot-${instance}.db`) })
-CabalState(cabal, )
-
+const cabal = Cabal(RAM, key)
+const service = CabalState.fromJson(cabal, machineDfn, 'default')
+service.onTransition(state => {
+  console.log(state.value);
+  console.log(state.context)
+});
+cabal.swarm(() => {})
 ```
