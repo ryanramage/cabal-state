@@ -50,9 +50,9 @@ Sandbox
 -------
 
 Xstate allows for functions to execute as gaurd conditions, to compute state, and to have some side effects. Currently, we run all code
-in a [vm2](https://github.com/patriksimek/vm2) sandbox, and only allow access to the console.
+in a [vm2](https://github.com/patriksimek/vm2) sandbox, and only allow access to the console, and the things needed to mutate xstate context.
 
-Its very important in a distributed environment that the state machine is side effect free. For example, adding fetch to the sandbox would cause many issues. 
+Its very important in a distributed environment that the state machine is side effect free. For example, adding fetch to the sandbox would cause many issues.
 
 
 Creating The MachineDfn
