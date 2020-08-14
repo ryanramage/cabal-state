@@ -1,6 +1,7 @@
 const { interpret } = require('xstate')
 const collect = require('collect-stream')
 const rehydrate = require('./lib/rehydrate')
+const parseMessage = require('./lib/cabalMessageToXstateEvent')
 
 exports.fromString = (cabal, machineDfn, channelName) => exports.fromJson(cabal, rehydrate.fromString(machineDfn), channelName)
 
@@ -67,15 +68,4 @@ function publishStateMessage (cabal, type, event) {
     }
   }
   if (event) cabalMessage.content.event = event
-}
-
-function parseMessage(message) {
-  let value = message.value
-  if (!value) return
-  let content = value.content
-  if (!content) return
-  let text = content.text
-  let event = content.event || {}
-  event.type = text
-  return event
 }
