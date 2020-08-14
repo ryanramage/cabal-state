@@ -7,6 +7,7 @@ exports.fromString = (cabal, machineDfn, channelName) => exports.fromJson(cabal,
 exports.fromJson = (cabal, machineDfn, channelName) => {
   const machine = rehydrate.fromJson(machineDfn)
   const service = interpret(machine)
+
   // dont expose service.send to the outside world. we want to send it to the cabal first
   let internalServiceSend = service.send // save for later
 
@@ -14,19 +15,20 @@ exports.fromJson = (cabal, machineDfn, channelName) => {
   cabal.ready(() => {
     const rs = cabal.messages.read(channelName)
     collect(rs, (err, msgs) => {
-      if (err) console.log("ERROR getting messages")
       let reversed = []
       for (let i = msgs.length - 1; i >= 0; --i) {
         const msg = msgs[i]
+
         let stateMachineMessage = parseMessage(msg)
-        if (stateMachineMessage) reversed.push(msg)
-      })
-      internalServiceSend(reversed)
+        if (stateMachineMessage) reversed.push(stateMachineMessage)
+      }
+      if (reversed.length) internalServiceSend(reversed)
 
       // now that we have caught the state machine up, bind to any more event messages
-      cabal.messages.events.on('message', (message) => {
+      cabal.messages.events.on('message', (details) => {
         let message = parseMessage(details)
         if (message) internalServiceSend(message)
+
       })
     })
   })
@@ -68,12 +70,12 @@ function publishStateMessage (cabal, type, event) {
 }
 
 function parseMessage(message) {
-  let value = details.value
+  let value = message.value
   if (!value) return
   let content = value.content
   if (!content) return
   let text = content.text
-  let event = context.event || {}
+  let event = content.event || {}
   event.type = text
   return event
 }
