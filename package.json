@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "run a state machine in a cabal-core channel",
   "main": "index.js",
+  "browser": {
+    "./lib/vm/index.js": "./lib/vm/browser.js"
+  },
   "bin": {
     "cabal-state": "./bin/cabal-state-to-json.js"
   },
